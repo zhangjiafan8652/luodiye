@@ -12,7 +12,7 @@
 // | github开源项目：https://github.com/zoujingli/ThinkAdmin
 // +----------------------------------------------------------------------
 
-namespace app\admin\controller;
+namespace app\web\controller;
 
 use controller\BasicAdmin;
 use service\DataService;
