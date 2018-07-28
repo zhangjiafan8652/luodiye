@@ -38,4 +38,11 @@ class Ceshi extends BasicAdmin
         return "ceshi";
     }
 
+    /**
+     * @return \think\App
+     */
+    public function getcode()
+    {
+        return "getcode";
+    }
 }
