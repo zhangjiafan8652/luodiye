@@ -61,7 +61,7 @@ class Ceshi extends BasicAdmin
 
        // $ip=$this->request->param('ip', '');
 
-       // echo $ip;
+        echo $ip;
         $post_data = array(
             'ip' => $ip,
             'ak' => $this->AK,
@@ -74,7 +74,7 @@ class Ceshi extends BasicAdmin
         $result->ceshiresult=$html;
         $de_json = json_decode($html,TRUE);
        // $count_json = count($de_json);
-        //echo $html;
+        echo $html;
 
         if(strpos($html,'address')!==false){
             $adress=$de_json["address"];
