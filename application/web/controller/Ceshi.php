@@ -75,7 +75,7 @@ class Ceshi extends BasicAdmin
         $de_json = json_decode($html,TRUE);
        // $count_json = count($de_json);
         //echo $html;
-        Log::error($de_json."获取的地址ip");
+        Log::error($de_json);
         if(strpos($html,'address')!==false){
             $adress=$de_json["address"];
             if(strpos($adress,'广州') !== false){
