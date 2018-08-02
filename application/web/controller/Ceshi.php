@@ -20,6 +20,9 @@ use service\NodeService;
 use service\ToolsService;
 use think\Db;
 use \think\Request;
+use think\facade\Request as temprequest;
+use think\facade\Log;
+
 
 /**
  * 系统权限管理控制器
@@ -46,14 +49,19 @@ class Ceshi extends BasicAdmin
     /**
      * @return \think\App
      */
-    public function getcode(Request $request)
+    public function getcode()
     {
 
         $result=new Ceshi();
         $result->code="200";
 
+        $ip= gethostbyname(temprequest::host());
+        Log::error($ip."进来的ip");
+        //echo  temprequest::host();
 
-        $ip=$this->request->get('ip', '');
+       // $ip=$this->request->param('ip', '');
+
+       // echo $ip;
         $post_data = array(
             'ip' => $ip,
             'ak' => $this->AK,
