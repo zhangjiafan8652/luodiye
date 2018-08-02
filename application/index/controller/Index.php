@@ -27,4 +27,8 @@ class Index extends Controller
     {
         $this->redirect('@admin/login');
     }
+    public function ceshi()
+    {
+        return "ceshi";
+    }
 }
