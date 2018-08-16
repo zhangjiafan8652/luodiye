@@ -84,7 +84,7 @@ class Ceshi extends BasicAdmin
                 $result->ceshiresult="ceshi";
                 return json_encode($result);
             }else{
-                $result->ceshiresult="IOyt1a07Jw";
+                $result->ceshiresult="CeEV7H074d";
                // (r竹e彩静TN垒J静儒菁泰)
                  //    $result->ceshiresult="(r竹e彩静TN垒J静儒菁泰)";
                 return json_encode($result);
