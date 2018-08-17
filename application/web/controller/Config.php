@@ -82,8 +82,6 @@ class Config extends BasicAdmin
 
             $code=Request::param('code');
             $name=Request::param('name');
-
-
             $data = ['code' => $code, 'name' => $name];
             $db=Db::name('web_config')->insert($data);
 
@@ -107,60 +105,33 @@ class Config extends BasicAdmin
      */
     public function edit()
     {
-        return $this->_form($this->table, 'form');
+        if(Request::has('name','post')){
+            $id=Request::param('id');
+            $code=Request::param('code');
+            $name=Request::param('name');
+            $isused=Request::param('isused');
+
+            Db::name('web_config')
+                ->where('id', $id)
+                ->update(['code' => $code,
+                    'name' => $name,
+                    'isused' => $isused]);
+            //$data = ['code' => $code, 'name' => $name];
+            //$db=Db::name('web_config')->insert($data);
+
+            return "123";
+        }else{
+            $id=Request::param('id');
+            // $data = ['code' => $code, 'name' => $name];
+            $db=Db::name('web_config')->where('id',$id)->find();
+            $this->assign('data',$db);
+            return $this->fetch();
+        };
+
     }
 
-    /**
-     * 用户密码修改
-     * @return array|string
-     * @throws \think\Exception
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     * @throws \think\exception\PDOException
-     */
-    public function pass()
-    {
-        if ($this->request->isGet()) {
-            $this->assign('verify', false);
-            return $this->_form($this->table, 'pass');
-        }
-        $post = $this->request->post();
-        if ($post['password'] !== $post['repassword']) {
-            $this->error('两次输入的密码不一致！');
-        }
-        $data = ['id' => $post['id'], 'password' => md5($post['password'])];
-        if (DataService::save($this->table, $data, 'id')) {
-            $this->success('密码修改成功，下次请使用新密码登录！', '');
-        }
-        $this->error('密码修改失败，请稍候再试！');
-    }
 
-    /**
-     * 表单数据默认处理
-     * @param array $data
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
-     */
-    public function _form_filter(&$data)
-    {
-        if ($this->request->isPost()) {
-            if (isset($data['authorize']) && is_array($data['authorize'])) {
-                $data['authorize'] = join(',', $data['authorize']);
-            } else {
-                $data['authorize'] = '';
-            }
-            if (isset($data['id'])) {
-                unset($data['username']);
-            } elseif (Db::name($this->table)->where(['username' => $data['username']])->count() > 0) {
-                $this->error('用户账号已经存在，请使用其它账号！');
-            }
-        } else {
-            $data['authorize'] = explode(',', isset($data['authorize']) ? $data['authorize'] : '');
-            $this->assign('authorizes', Db::name('SystemAuth')->where(['status' => '1'])->select());
-        }
-    }
+
 
     /**
      * 删除用户
@@ -169,13 +140,10 @@ class Config extends BasicAdmin
      */
     public function del()
     {
-        if (in_array('10000', explode(',', $this->request->post('id')))) {
-            $this->error('系统超级账号禁止删除！');
-        }
-        if (DataService::update($this->table)) {
-            $this->success("用户删除成功！", '');
-        }
-        $this->error("用户删除失败，请稍候再试！");
+        $id=Request::param('id');
+        Db::table('web_config')->delete($id);
+        return $id;
+
     }
 
     /**

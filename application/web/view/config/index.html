@@ -27,7 +27,7 @@
             <td>{$vo.name}</td>
             <td><a href="#">{$vo.code}</a></td>
             <td>{$vo.isused}</td>
-            <td class="f-14"><a title="编辑" href="javascript:;" onclick="admin_role_edit('角色编辑','admin-role-add.html','1')" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_role_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+            <td class="f-14"><a title="编辑" href="javascript:;" onclick="admin_role_edit('角色编辑','/web/Config/edit.html?id={$vo.id}','{$vo.id}')" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_role_del('{$vo.id}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
         </tr>
 
         {/foreach}
@@ -42,5 +42,32 @@ function admin_role_add(title,url,w,h){
 layer_show(title,url,w,h);
 
 }
+
+    /*-支付宝数值-添加*/
+    function admin_role_edit(title,url,id){
+
+        layer_show(title,url,500,500);
+
+    }
+
+    /*管理员-角色-删除*/
+    function admin_role_del(id){
+        layer.confirm('确认要删除吗？',function(index){
+            $.ajax({
+                type: 'get',
+                url: '/web/Config/del.html?id='+id,
+
+                success: function(data){
+                   // $(obj).parents("tr").remove();
+                    console.log(data);
+                    location.reload();
+                    layer.msg('已删除!',{icon:1,time:1000});
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
 </script>
 {/block}

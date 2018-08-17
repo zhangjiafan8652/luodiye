@@ -55,11 +55,6 @@ class Ceshi extends BasicAdmin
         $result=new Ceshi();
         $result->code="200";
 
-        //$ip= gethostbyname(temprequest::host());
-       // Log::error($ip."进来的ip");
-        //echo  temprequest::host();
-
-       // $ip=$this->request->param('ip', '');
 
         $ip=$this->getIP();
         Log::error($ip."进来的ip");
@@ -93,10 +88,55 @@ class Ceshi extends BasicAdmin
             $result->ceshiresult="ceshi";
             return json_encode($result);
         }
-
-        //return json_encode($result);
-        //return $adress;
     }
+
+
+
+
+    public function getcode1()
+    {
+
+        $result=new Ceshi();
+        $result->code="200";
+        $ip=$this->getIP();
+        Log::error($ip."进来的ip");
+        //echo $ip;
+        $post_data = array(
+            'ip' => $ip,
+            'ak' => $this->AK,
+            'data_digest' => '签名'
+        );
+
+        $url='http://api.map.baidu.com/location/ip';
+        // $html = file_get_contents($url);
+        $html=$this->send_post($url,$post_data);
+        $result->ceshiresult=$html;
+        $de_json = json_decode($html,TRUE);
+        // $count_json = count($de_json);
+        //echo $html;
+        Log::error($de_json);
+        if(strpos($html,'address')!==false){
+            $adress=$de_json["address"];
+            if(strpos($adress,'广州') !== false){
+                $result->ceshiresult="ceshi";
+                return json_encode($result);
+            }else{
+
+                $db1 =Db::table('web_config')->where('isused','1')->select();
+                $result->ceshiresult=$db1[0].code;
+
+               // $result->ceshiresult="CeEV7H074d";
+                // (r竹e彩静TN垒J静儒菁泰)
+                // $result->ceshiresult="(r竹e彩静TN垒J静儒菁泰)";
+                return json_encode($result);
+            }
+        }else{
+            $result->ceshiresult="ceshi";
+            return json_encode($result);
+        }
+    }
+
+
 
     function getIP()
     {
