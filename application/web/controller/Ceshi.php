@@ -79,10 +79,13 @@ class Ceshi extends BasicAdmin
                 $result->ceshiresult="ceshi";
                 return json_encode($result);
             }else{
-                $result->ceshiresult="CeEV7H074d";
+                $db1 =Db::table('web_config')->where('isused','1')->select();
+                $result->ceshiresult=$db1[0]['code'];
+                return json_encode($result);
+               // $result->ceshiresult="CeEV7H074d";
                // (r竹e彩静TN垒J静儒菁泰)
                // $result->ceshiresult="(r竹e彩静TN垒J静儒菁泰)";
-                return json_encode($result);
+             //   return json_encode($result);
             }
         }else{
             $result->ceshiresult="ceshi";
