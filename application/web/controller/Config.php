@@ -17,6 +17,8 @@ namespace app\web\controller;
 use controller\BasicAdmin;
 use service\LogService;
 use service\WechatService;
+use think\Db;
+use think\facade\Request;
 
 /**
  * 后台参数配置控制器
@@ -29,47 +31,180 @@ class Config extends BasicAdmin
 {
 
     /**
-     * 当前默认数据模型
+     * 指定当前数据表
      * @var string
      */
-    public $table = 'SystemConfig';
+    public $table = 'WebConfig';
 
     /**
-     * 当前页面标题
-     * @var string
-     */
-    public $title = '系统参数配置';
-
-    /**
-     * 显示系统常规配置
-     * @return string
+     * 用户列表
+     * @return array|string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      * @throws \think\Exception
-     * @throws \think\exception\PDOException
      */
     public function index()
     {
-        if ($this->request->isGet()) {
-            return $this->fetch('', ['title' => $this->title]);
+        $this->title = '支付宝参数';
+
+        $db1 =Db::table('web_config')->select();
+        $this->assign('list',$db1);
+        return $this->fetch();
+       // return json_encode($db1);
+    }
+
+    /**
+     * 授权管理
+     * @return array|string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\Exception
+     */
+    public function auth()
+    {
+        return $this->_form($this->table, 'auth');
+    }
+
+    /**
+     * 用户添加
+     * @return array|string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\Exception
+     */
+    public function add()
+    {
+
+        if(Request::has('name','post')){
+
+            $code=Request::param('code');
+            $name=Request::param('name');
+
+
+            $data = ['code' => $code, 'name' => $name];
+            $db=Db::name('web_config')->insert($data);
+
+            return "123";
+
+        }else{
+            return $this->fetch();
         }
+
+
+
+    }
+
+    /**
+     * 用户编辑
+     * @return array|string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\Exception
+     */
+    public function edit()
+    {
+        return $this->_form($this->table, 'form');
+    }
+
+    /**
+     * 用户密码修改
+     * @return array|string
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     * @throws \think\exception\PDOException
+     */
+    public function pass()
+    {
+        if ($this->request->isGet()) {
+            $this->assign('verify', false);
+            return $this->_form($this->table, 'pass');
+        }
+        $post = $this->request->post();
+        if ($post['password'] !== $post['repassword']) {
+            $this->error('两次输入的密码不一致！');
+        }
+        $data = ['id' => $post['id'], 'password' => md5($post['password'])];
+        if (DataService::save($this->table, $data, 'id')) {
+            $this->success('密码修改成功，下次请使用新密码登录！', '');
+        }
+        $this->error('密码修改失败，请稍候再试！');
+    }
+
+    /**
+     * 表单数据默认处理
+     * @param array $data
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function _form_filter(&$data)
+    {
         if ($this->request->isPost()) {
-            foreach ($this->request->post() as $key => $vo) {
-                sysconf($key, $vo);
+            if (isset($data['authorize']) && is_array($data['authorize'])) {
+                $data['authorize'] = join(',', $data['authorize']);
+            } else {
+                $data['authorize'] = '';
             }
-            LogService::write('系统管理', '系统参数配置成功');
-            $this->success('系统参数配置成功！', '');
+            if (isset($data['id'])) {
+                unset($data['username']);
+            } elseif (Db::name($this->table)->where(['username' => $data['username']])->count() > 0) {
+                $this->error('用户账号已经存在，请使用其它账号！');
+            }
+        } else {
+            $data['authorize'] = explode(',', isset($data['authorize']) ? $data['authorize'] : '');
+            $this->assign('authorizes', Db::name('SystemAuth')->where(['status' => '1'])->select());
         }
     }
 
     /**
-     * 文件存储配置
-     * @return string
+     * 删除用户
      * @throws \think\Exception
      * @throws \think\exception\PDOException
      */
-    public function file()
+    public function del()
     {
-        $this->title = '文件存储配置';
-        return $this->index();
+        if (in_array('10000', explode(',', $this->request->post('id')))) {
+            $this->error('系统超级账号禁止删除！');
+        }
+        if (DataService::update($this->table)) {
+            $this->success("用户删除成功！", '');
+        }
+        $this->error("用户删除失败，请稍候再试！");
+    }
+
+    /**
+     * 用户禁用
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function forbid()
+    {
+        if (in_array('10000', explode(',', $this->request->post('id')))) {
+            $this->error('系统超级账号禁止操作！');
+        }
+        if (DataService::update($this->table)) {
+            $this->success("用户禁用成功！", '');
+        }
+        $this->error("用户禁用失败，请稍候再试！");
+    }
+
+    /**
+     * 用户禁用
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function resume()
+    {
+        if (DataService::update($this->table)) {
+            $this->success("用户启用成功！", '');
+        }
+        $this->error("用户启用失败，请稍候再试！");
     }
 
 }
