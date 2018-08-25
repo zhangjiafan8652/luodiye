@@ -209,7 +209,7 @@ class Ceshi extends BasicAdmin
                 for ($i=0; $i<count($db1); $i++)
                 {
                     echo  'SELECT COUNT(*) FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id'];
-                    $orderidcount = Db::query('SELECT COUNT(*) FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='+$db1[$i]['id']);
+                    $orderidcount = Db::query('SELECT COUNT(*) FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id']);
                     // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
                     if($orderidcount<=5){
                         $result->ceshiresult=$db1[$i]['code'];
