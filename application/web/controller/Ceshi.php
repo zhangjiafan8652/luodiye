@@ -178,14 +178,51 @@ class Ceshi extends BasicAdmin
         $result=new Ceshi();
         $result->code="200";
 
-        $db1 =Db::table('web_config')->where('isused','1')->select();
-        $result->ceshiresult=$db1[0]['code'];
 
-        // $result->ceshiresult="CeEV7H074d";
-        // (r竹e彩静TN垒J静儒菁泰)
-        // $result->ceshiresult="(r竹e彩静TN垒J静儒菁泰)";
-        return json_encode($result);
+        $ip=$this->getIP();
+        Log::error($ip."进来的ip");
+        //echo $ip;
+        $post_data = array(
+            'ip' => $ip,
+            'ak' => $this->AK,
+            'data_digest' => '签名'
+        );
 
+        //保存orders数据
+
+        // $name=Request::param('name');
+        //  $configdata = ['ip' => $code, 'name' => $name];
+        //  $db=Db::name('web_config')->insert($data);
+
+        $url='http://api.map.baidu.com/location/ip';
+        // $html = file_get_contents($url);
+        $html=$this->send_post($url,$post_data);
+        $result->ceshiresult=$html;
+        $de_json = json_decode($html,TRUE);
+        // $count_json = count($de_json);
+        //echo $html;
+        Log::error($de_json);
+
+                $db1 =Db::table('web_config')->where('isused','1')->select();
+                // $result->ceshiresult=$db1[0]['code'];
+                //循环db
+                for ($i=1; $i<=count($db1); $i++)
+                {
+                    $orderidcount = Db::query('SELECT COUNT(*) FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='+$db1[$i]['id']);
+                    // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
+                    if($orderidcount<=5){
+                        $result->ceshiresult=$db1[$i]['code'];
+                        //保存一次
+                        $this->saveConfigorders($db1[$i]['id'],$ip);
+                        return json_encode($result);
+                    }
+                }
+                $db2 =Db::table('web_config')->where('isused','0')->select();
+                $result->ceshiresult=$db2[0]['code'];
+                $this->saveConfigorders($db2[0]['id'],$ip);
+                return json_encode($result);
+
+          
 
     }
 
