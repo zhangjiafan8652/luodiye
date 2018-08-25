@@ -133,10 +133,10 @@ class Ceshi extends BasicAdmin
                 $result->ceshiresult="ceshi";
                 return json_encode($result);
             }else{
-                $db1 =Db::table('web_config')->where('isused','0')->select();
+                $db1 =Db::table('web_config')->where('isused','1')->select();
                // $result->ceshiresult=$db1[0]['code'];
                 //循环db
-                for ($i=1; $i<=count($db1); $i++)
+                for ($i=0; $i<count($db1); $i++)
                 {
                     $orderidcount = Db::query('SELECT COUNT(*) FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id']);
                    // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
@@ -147,7 +147,7 @@ class Ceshi extends BasicAdmin
                         return json_encode($result);
                     }
                 }
-                $db2 =Db::table('web_config')->where('isused','1')->select();
+                $db2 =Db::table('web_config')->where('isused','0')->select();
                 $result->ceshiresult=$db2[0]['code'];
                 $this->saveConfigorders($db2[0]['id'],$ip);
                 return json_encode($result);
