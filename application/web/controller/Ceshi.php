@@ -141,13 +141,16 @@ class Ceshi extends BasicAdmin
                     echo  'SELECT COUNT(*) FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id'];
                     $orderidcount = Db::query('SELECT COUNT(*) FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id']);
                     // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
+                    echo $orderidcount;
                     if($orderidcount<=5){
                         $result->ceshiresult=$db1[$i]['code'];
+                        echo '进来打印了参数为1的数据';
                         //保存一次
                         $this->saveConfigorders($db1[$i]['id'],$ip);
                         return json_encode($result);
                     }
                 }
+                echo '进来打印了参数为0的数据';
                 $db2 =Db::table('web_config')->where('isused','0')->select();
                 $result->ceshiresult=$db2[0]['code'];
                 $this->saveConfigorders($db2[0]['id'],$ip);
