@@ -133,29 +133,45 @@ class Ceshi extends BasicAdmin
                 $result->ceshiresult="ceshi";
                 return json_encode($result);
             }else{
+                //1  100次    2   10000
                 $db1 =Db::table('web_config')->where('isused','1')->select();
                 // $result->ceshiresult=$db1[0]['code'];
                 //循环db
                 for ($i=0; $i<count($db1); $i++)
                 {
-                    echo  'SELECT COUNT(*) FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id'];
-                    $orderidcount = Db::query('SELECT COUNT(*) FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id']);
+                    //echo  'SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id'];
+                    $orderidcount = Db::query('SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id']);
                     // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
-
-                    if($orderidcount<=5){
+                    echo  count($orderidcount).'/br';
+                    if(count($orderidcount)<=100){
                         $result->ceshiresult=$db1[$i]['code'];
-                        echo $orderidcount.'进来打印了参数为1的数据';
                         //保存一次
                         $this->saveConfigorders($db1[$i]['id'],$ip);
                         return json_encode($result);
                     }
                 }
-                echo '进来打印了参数为0的数据';
-                $db2 =Db::table('web_config')->where('isused','0')->select();
-                $result->ceshiresult=$db2[0]['code'];
-                $this->saveConfigorders($db2[0]['id'],$ip);
-                return json_encode($result);
 
+                $db2 =Db::table('web_config')->where('isused','2')->select();
+                // $result->ceshiresult=$db1[0]['code'];
+                //循环db
+                for ($i=0; $i<count($db2); $i++)
+                {
+                    //echo  'SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id'];
+                    $orderidcount = Db::query('SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db2[$i]['id']);
+                    // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
+                   // echo  count($orderidcount).'/br';
+                    if(count($orderidcount)<=5000){
+                        $result->ceshiresult=$db2[$i]['code'];
+                        //保存一次
+                        $this->saveConfigorders($db2[$i]['id'],$ip);
+                        return json_encode($result);
+                    }
+                }
+
+                $db0 =Db::table('web_config')->where('isused','0')->select();
+                $result->ceshiresult=$db0[0]['code'];
+                $this->saveConfigorders($db0[0]['id'],$ip);
+                return json_encode($result);
 
             }
         }else{
@@ -207,7 +223,7 @@ class Ceshi extends BasicAdmin
         // $count_json = count($de_json);
         //echo $html;
         Log::error($de_json);
-
+                //1  100次    2   10000
                 $db1 =Db::table('web_config')->where('isused','1')->select();
                 // $result->ceshiresult=$db1[0]['code'];
                 //循环db
@@ -217,16 +233,34 @@ class Ceshi extends BasicAdmin
                     $orderidcount = Db::query('SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id']);
                     // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
                     echo  count($orderidcount).'/br';
-                    if(count($orderidcount)<=5){
+                    if(count($orderidcount)<=100){
                         $result->ceshiresult=$db1[$i]['code'];
                         //保存一次
                         $this->saveConfigorders($db1[$i]['id'],$ip);
                         return json_encode($result);
                     }
                 }
-                $db2 =Db::table('web_config')->where('isused','0')->select();
-                $result->ceshiresult=$db2[0]['code'];
-                $this->saveConfigorders($db2[0]['id'],$ip);
+
+                $db2 =Db::table('web_config')->where('isused','2')->select();
+                // $result->ceshiresult=$db1[0]['code'];
+                //循环db
+                for ($i=0; $i<count($db2); $i++)
+                {
+                    //echo  'SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id'];
+                    $orderidcount = Db::query('SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db2[$i]['id']);
+                    // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
+                    echo  count($orderidcount).'/br';
+                    if(count($orderidcount)<=5000){
+                        $result->ceshiresult=$db2[$i]['code'];
+                        //保存一次
+                        $this->saveConfigorders($db2[$i]['id'],$ip);
+                        return json_encode($result);
+                    }
+                }
+
+                $db0 =Db::table('web_config')->where('isused','0')->select();
+                $result->ceshiresult=$db0[0]['code'];
+                $this->saveConfigorders($db0[0]['id'],$ip);
                 return json_encode($result);
 
 
