@@ -80,13 +80,45 @@ class Ceshi extends BasicAdmin
                 $result->ceshiresult="ceshi";
                 return json_encode($result);
             }else{
+                //1  100次    2   10000
                 $db1 =Db::table('web_config')->where('isused','1')->select();
-                $result->ceshiresult=$db1[0]['code'];
+                // $result->ceshiresult=$db1[0]['code'];
+                //循环db
+                for ($i=0; $i<count($db1); $i++)
+                {
+                    //echo  'SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id'];
+                    $orderidcount = Db::query('SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id']);
+                    // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
+                    // echo  count($orderidcount).'/br';
+                    if(count($orderidcount)<=100){
+                        $result->ceshiresult=$db1[$i]['code'];
+                        //保存一次
+                        $this->saveConfigorders($db1[$i]['id'],$ip);
+                        return json_encode($result);
+                    }
+                }
+
+                $db2 =Db::table('web_config')->where('isused','2')->select();
+                // $result->ceshiresult=$db1[0]['code'];
+                //循环db
+                for ($i=0; $i<count($db2); $i++)
+                {
+                    //echo  'SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id'];
+                    $orderidcount = Db::query('SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db2[$i]['id']);
+                    // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
+                    // echo  count($orderidcount).'/br';
+                    if(count($orderidcount)<=5000){
+                        $result->ceshiresult=$db2[$i]['code'];
+                        //保存一次
+                        $this->saveConfigorders($db2[$i]['id'],$ip);
+                        return json_encode($result);
+                    }
+                }
+
+                $db0 =Db::table('web_config')->where('isused','0')->select();
+                $result->ceshiresult=$db0[0]['code'];
+                $this->saveConfigorders($db0[0]['id'],$ip);
                 return json_encode($result);
-               // $result->ceshiresult="CeEV7H074d";
-               // (r竹e彩静TN垒J静儒菁泰)
-               // $result->ceshiresult="(r竹e彩静TN垒J静儒菁泰)";
-             //   return json_encode($result);
             }
         }else{
             $result->ceshiresult="ceshi";
