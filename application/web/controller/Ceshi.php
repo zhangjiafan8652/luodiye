@@ -55,8 +55,6 @@ class Ceshi extends BasicAdmin
 
         $result=new Ceshi();
         $result->code="200";
-
-
         $ip=$this->getIP();
         Log::error($ip."进来的ip");
         //echo $ip;
@@ -175,7 +173,7 @@ class Ceshi extends BasicAdmin
                     $orderidcount = Db::query('SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id']);
                     // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
                    // echo  count($orderidcount).'/br';
-                    if(count($orderidcount)<=100){
+                    if(count($orderidcount)<=200){
                         $result->ceshiresult=$db1[$i]['code'];
                         //保存一次
                         $this->saveConfigorders($db1[$i]['id'],$ip);
