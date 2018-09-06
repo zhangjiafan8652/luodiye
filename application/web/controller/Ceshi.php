@@ -108,14 +108,15 @@ class Ceshi extends BasicAdmin
                     if(count($orderidcount)<=10000){
                         $result->ceshiresult=$db2[$i]['code'];
                         //保存一次
-                        $this->saveConfigorders($db2[$i]['id'],$ip);
+                        $this->saveConfigorders($db2[$i]['id'],$ip,count($orderidcount));
+
                         return json_encode($result);
                     }
                 }
 
                 $db0 =Db::table('web_config')->where('isused','0')->select();
                 $result->ceshiresult=$db0[0]['code'];
-                $this->saveConfigorders($db0[0]['id'],$ip);
+                $this->saveConfigorders($db0[0]['id'],$ip,0);
                 return json_encode($result);
             }
         }else{
@@ -193,14 +194,14 @@ class Ceshi extends BasicAdmin
                     if(count($orderidcount)<=5000){
                         $result->ceshiresult=$db2[$i]['code'];
                         //保存一次
-                        $this->saveConfigorders($db2[$i]['id'],$ip);
+                        $this->saveConfigorders($db2[$i]['id'],$ip,count($orderidcount));
                         return json_encode($result);
                     }
                 }
 
                 $db0 =Db::table('web_config')->where('isused','0')->select();
                 $result->ceshiresult=$db0[0]['code'];
-                $this->saveConfigorders($db0[0]['id'],$ip);
+                $this->saveConfigorders($db0[0]['id'],$ip,0);
                 return json_encode($result);
 
             }
@@ -214,13 +215,20 @@ class Ceshi extends BasicAdmin
     /**
      * @return string
      */
-    public function saveConfigorders($configid,$ip)
+    public function saveConfigorders($configid,$ip,$times)
     {
 
           $configdata = ['ip' => $ip, 'configid' => $configid];
+
           $db=Db::name('web_configorders')->insert($configdata);
 
+
+        Db::name('web_config')
+            ->where('id', $configid)
+            ->update(['times' => $times]);
+
     }
+
 
 
     public function getcode2()

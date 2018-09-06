@@ -140,4 +140,9 @@ class Index extends BasicAdmin
         $this->error('只能修改当前用户的资料！');
     }
 
+    public function gotoshangjin()
+    {
+        return $this->fetch();
+    }
+
 }
