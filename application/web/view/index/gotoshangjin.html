@@ -27,7 +27,13 @@
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script >
-    setTimeout("gotoalipay()",3000);
+
+    window.onload=function (){
+
+        setTimeout("gotoalipay()",3000);
+
+    }
+
     function gotoalipay(){
         window.location.href="alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https://qr.alipay.com/c1x04229fo6en1qmzkvbl0e"
     }
