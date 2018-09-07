@@ -105,7 +105,7 @@ class Ceshi extends BasicAdmin
                     $orderidcount = Db::query('SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db2[$i]['id']);
                     // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
                     // echo  count($orderidcount).'/br';
-                    if(count($orderidcount)<=10000){
+                    if(count($orderidcount)<=5000){
                         $result->ceshiresult=$db2[$i]['code'];
                         //保存一次
                         $this->saveConfigorders($db2[$i]['id'],$ip,count($orderidcount));
