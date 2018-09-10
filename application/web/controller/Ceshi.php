@@ -73,7 +73,11 @@ class Ceshi extends BasicAdmin
         //echo $html;
         Log::error($de_json);
         if(strpos($html,'address')!==false){
+
             $adress=$de_json["address"];
+
+
+
             if(strpos($adress,'广州') !== false){
                 $result->ceshiresult="ceshi";
                 return json_encode($result);
@@ -88,10 +92,11 @@ class Ceshi extends BasicAdmin
                     $orderidcount = Db::query('SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db1[$i]['id']);
                     // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
                     // echo  count($orderidcount).'/br';
-                    if(count($orderidcount)<=300){
+                    if(count($orderidcount)<=1000){
                         $result->ceshiresult=$db1[$i]['code'];
                         //保存一次
                         $this->saveConfigorders($db1[$i]['id'],$ip);
+                        $this->saveConfigorders($db1[$i]['id'],$ip,count($orderidcount));
                         return json_encode($result);
                     }
                 }
@@ -105,7 +110,7 @@ class Ceshi extends BasicAdmin
                     $orderidcount = Db::query('SELECT * FROM web_configorders WHERE DATEDIFF(time,NOW())=0 AND configid='.$db2[$i]['id']);
                     // $ordersbyconfigid =Db::table('web_configorders')->where('configid',$db1[$i]['id'])->select();
                     // echo  count($orderidcount).'/br';
-                    if(count($orderidcount)<=5000){
+                    if(count($orderidcount)<=2000){
                         $result->ceshiresult=$db2[$i]['code'];
                         //保存一次
                         $this->saveConfigorders($db2[$i]['id'],$ip,count($orderidcount));
@@ -178,6 +183,7 @@ class Ceshi extends BasicAdmin
                         $result->ceshiresult=$db1[$i]['code'];
                         //保存一次
                         $this->saveConfigorders($db1[$i]['id'],$ip);
+                        $this->saveConfigorders($db1[$i]['id'],$ip,count($orderidcount));
                         return json_encode($result);
                     }
                 }
