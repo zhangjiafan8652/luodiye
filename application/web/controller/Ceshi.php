@@ -95,7 +95,7 @@ class Ceshi extends BasicAdmin
                     if(count($orderidcount)<=1000){
                         $result->ceshiresult=$db1[$i]['code'];
                         //保存一次
-                        $this->saveConfigorders($db1[$i]['id'],$ip);
+                       // $this->saveConfigorders($db1[$i]['id'],$ip);
                         $this->saveConfigorders($db1[$i]['id'],$ip,count($orderidcount));
                         return json_encode($result);
                     }
