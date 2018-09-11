@@ -143,10 +143,17 @@ class Index extends BasicAdmin
 
     public function gotoshangjin()
     {
+
         $name=Request::param('username');
-        $db1 =Db::table('web_config')->where('name',$name)->select();
-        $this->assign('code',$db1[0]['code']);
-        return $this->fetch();
+        if(empty($name)){
+            $this->error('输入的网址有误，请重新输入~~');
+        }else{
+            $db1 =Db::table('web_config')->where('name',$name)->select();
+            $this->assign('code',$db1[0]['code']);
+            return $this->fetch();
+        }
+
+
     }
 
 }
