@@ -142,9 +142,9 @@ class Index extends BasicAdmin
 
     public function gotoshangjin()
     {
-        $code=Request::param('username');
-        $db1 =Db::table('web_config')->where('isused','1')->select();
-        $this->assign('list',$db1);
+        $name=Request::param('username');
+        $db1 =Db::table('web_config')->where('name',$name)->select();
+        $this->assign('code',$db1[0]['code']);
         return $this->fetch();
     }
 
