@@ -55,6 +55,22 @@ class Ceshi extends BasicAdmin
 
         $result=new Ceshi();
         $result->code="200";
+
+            $result->ceshiresult="ceshi";
+            return json_encode($result);
+
+    }
+
+
+
+    /**
+     * @return \think\App
+     */
+    public function getcode3()
+    {
+
+        $result=new Ceshi();
+        $result->code="200";
         $ip=$this->getIP();
         Log::error($ip."进来的ip");
         //echo $ip;
@@ -65,11 +81,11 @@ class Ceshi extends BasicAdmin
         );
 
         $url='http://api.map.baidu.com/location/ip';
-       // $html = file_get_contents($url);
+        // $html = file_get_contents($url);
         $html=$this->send_post($url,$post_data);
         $result->ceshiresult=$html;
         $de_json = json_decode($html,TRUE);
-       // $count_json = count($de_json);
+        // $count_json = count($de_json);
         //echo $html;
         Log::error($de_json);
         if(strpos($html,'address')!==false){
@@ -95,7 +111,7 @@ class Ceshi extends BasicAdmin
                     if(count($orderidcount)<=1000){
                         $result->ceshiresult=$db1[$i]['code'];
                         //保存一次
-                       // $this->saveConfigorders($db1[$i]['id'],$ip);
+                        // $this->saveConfigorders($db1[$i]['id'],$ip);
                         $this->saveConfigorders($db1[$i]['id'],$ip,count($orderidcount));
                         return json_encode($result);
                     }
@@ -129,8 +145,6 @@ class Ceshi extends BasicAdmin
             return json_encode($result);
         }
     }
-
-
 
 
     public function getcode1()
