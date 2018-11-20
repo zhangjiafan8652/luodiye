@@ -95,6 +95,11 @@ class Config extends BasicAdmin
 
     }
 
+    public function uploadfile()
+    {
+        return $this->fetch();
+    }
+
     /**
      * 用户编辑
      * @return array|string
