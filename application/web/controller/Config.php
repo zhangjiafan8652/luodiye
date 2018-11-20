@@ -94,7 +94,10 @@ class Config extends BasicAdmin
 
 
     }
-
+    public function uploadfile1()
+    {
+        return "uploadfile1";
+    }
     public function uploadfile()
     {
         return $this->fetch();
