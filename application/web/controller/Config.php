@@ -103,6 +103,11 @@ class Config extends BasicAdmin
         return $this->fetch();
     }
 
+
+    public function upload_photo()
+    {
+        return $this->fetch();
+    }
     /**
      * 用户编辑
      * @return array|string
