@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)http://taoyanran.duapp.com/kaws/salvation/salvation.html -->
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>上传图片测试</title>
+
+ <!--   __STATIC__/hui/static/h-ui/css/H-ui.min.css-->
+
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+    <link rel="stylesheet" href="__STATIC__/assets/upload_photo_files/salvation_style.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/assets/css/font-awesome.min.css">
+    <script src="__STATIC__/assets/upload_photo_files/jquery-1.9.1.min.js"></script>
+    <style>
+        /* 头部 */
+        .phone{
+            height:2.5rem;
+            background:#FBAF1E;
+            position:fixed;
+            width:100%;
+            z-index: 111;
+        }
+        .tit_height{
+            position:fixed;
+            width:100%;
+            top:0;
+            height: 4.7285rem;
+            background: #FBAF1E;
+            color: white;
+            font-size: 1.1rem;
+            z-index:111;
+        }
+        .tit_center{
+            margin-top: 2.45rem;
+            margin-left: auto;
+            margin-right: auto;
+            color: #FFE8C1;
+            text-align:right;
+            position:relative;
+        }
+        .tit_active{
+            color:white;
+        }
+        .flex{
+            flex:1;
+            text-align:center;
+        }
+        /* 返回 */
+        .fa_left{
+            position: absolute;
+            margin-top: 2.45rem;
+            left: 1.2rem;
+            font-size: 1.5rem;
+            z-index:1;
+        }
+        .list{
+            padding:1em;
+            margin-top:4.7285rem;
+        }
+        .opinion_kuang{
+            width:100%;
+            resize:none;
+            font-size:1rem;
+            border:0;
+            outline: 0 none;
+        }
+        .mr12{
+            margin-right:1.2rem;
+        }
+        .pic_model{
+            position:relative;
+        }
+        .del{
+            position: absolute;
+            width: 20%;
+            /* height: 20%; */
+            right: 11%;
+            top: 0;
+        }
+        .del img{
+            background: rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+<div class="page" id="app">
+    <!-- 头部nav -->
+    <div class="tit_height">
+        <!-- 头部 -->
+        <i @click="toGameCircle" class="fa fa-angle-left  fa_left" aria-hidden="true"></i>
+
+        <div class="tit_center colorWhite">
+            <span class="tit_txt_add mr12 submit_picture" >发表</span>
+        </div>
+    </div>
+    <div class="container list">
+        <textarea autofocus rows="5"  class="opinion_kuang"  name="" placeholder="这一刻的想法..." v-model="content">
+                </textarea>
+
+        <div class="page2">
+            <div class="upload_pic" id="upload_pic">
+                <!--添加图片按钮-->
+                <div class="add_pic pic_model" style="height: 417.45px;">
+                    <form id="uploadForm" class="add_pic_div" enctype="multipart/form-data">
+                        <!--<input type="file" name="image" accept="image/*" capture/>-->
+                        <!-- <input type="file" accept="image/*" capture="camera"> -->
+                        <input  type="file"  name="file1" id="file1">
+                        <input  type="file"  name="file2"  id="file2">
+                    </form>
+                </div>
+                <!--<div class="pic_model"><img src="images/kaxws_qrcode.png" alt=""><span class="delete"></span></div>
+                <div class="pic_model"><img src="images/kaxws_qrcode.png" alt=""><span class="delete"></span></div>
+                <div class="pic_model"><img src="images/kaxws_qrcode.png" alt=""><span class="delete"></span></div>
+                <div class="pic_model"><img src="images/kaxws_qrcode.png" alt=""><span class="delete"></span></div>
+                <div class="pic_model"><img src="images/kaxws_qrcode.png" alt=""><span class="delete"></span></div>
+                <div class="pic_model"><img src="images/kaxws_qrcode.png" alt=""><span class="delete"></span></div>
+                <div class="pic_model"><img src="images/kaxws_qrcode.png" alt=""><span class="delete"></span></div>-->
+            </div>
+            <!-- <p class="upload_pic_reamrk">注：审核通过后，照片会打上专用水印，请放心上传</p> -->
+        </div>
+
+
+    </div>
+</div>
+
+
+<div class="loading_bg">
+    <div class="loading"></div>
+</div>
+
+
+<!--提示-->
+<div class="fixed">
+    <div class="mask"></div>
+
+    <div class="under_five remind"></div> <!--少于五张-->
+    <div class="more_ten remind"></div> <!--多于10张-->
+    <div class="infoincomplete remind"></div> <!--资料不全-->
+    <div class="salvation_submit_success remind"></div> <!--提交成功-->
+</div>
+
+
+<!-- <script src="./assets/upload_photo_files/jweixin-1.0.0.js"></script> -->
+<!-- <script src="./assets/upload_photo_files/salvation_wx_share.js"></script> -->
+<script src="__STATIC__/assets/vue.js"></script>
+<script>
+     var vm = new Vue({
+        el: '#app',
+        data: {
+            list:{},
+            content:'',//内容
+            maxicon:false
+        },
+        methods:{
+            toGameCircle(){
+
+            }
+        },
+        created:function(){
+
+        }
+    })
+</script>
+<script>
+
+    var picWidth = ($(window).width() - 82) * 0.33
+    $('.pic_model').css({
+        height : picWidth + 'px'
+    });
+
+    $('.apply a').click(function(){
+        $('.page1').hide();
+        $('.page2').show()
+    });
+
+
+    $('.remind').click(function(){
+        $('.fixed').fadeOut(150)
+        $(document.body).css('overflow','auto')
+    });
+    /*添加照片*/
+    $('.add_pic_div input').change(function(e){
+        var file = this.files[0]; //选择上传的文件
+        var r = new FileReader();
+        r.readAsDataURL(file); //Base64
+        $(r).load(function(){
+            var addImg = '<div class="pic_model"><img style="height: '+picWidth+'px" src="'+ this.result +'" alt="" /><span class="delete"></span><div class="del"><img src="./images/del.png" alt="" /></div></div>'
+            $('.upload_pic').prepend(addImg);
+
+            // console.log($(this))
+            // var src = window.URL.createObjectURL(f);
+            // document.getElementById('preview').src = src;
+        });
+        // var formData = new FormData($('#uploadForm')[0])
+        // console.log(formData)
+    });
+
+    $('.add_pic_div input').click(function(){
+    })
+    /*删除照片*/
+    $('div').delegate('.delete','click',function(event){
+        event.stopPropagation();
+        var parentDiv=$(this).parent('div').parent('#upload_pic').children('div');
+        var removeDivIndex = parentDiv.index($(this).parent('div'));
+        parentDiv.eq(removeDivIndex).remove();
+    });
+    /*提交照片*/
+    $('.submit_picture').click(function(){
+       // var formData = new FormData($('#uploadForm'))
+        console.log(formData)
+        if($('.pic_model').length < 6){   // 6
+            <!--$('.under_five').show();-->
+            <!--$('.fixed').show();-->
+            <!--return false-->
+
+
+           var formData = new FormData();
+            formData.append("ceshishuju", "上传图片测试数据");
+            formData.append("file1", $('#file1')[0].files[0]);
+            formData.append("file2", $('#file2')[0].files[0]);
+           // formData.append("file3", $('#file3')[0].files[0]);
+            $.ajax({
+                url: 'web/Config/uploadfiles' ,
+                type: 'post',
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                async: false
+            }).done(function(res) {
+
+            }).fail(function(res) {
+
+            });
+
+            alert('上传成功，js处理相关逻辑')
+        }else if($('.pic_model').length > 11){
+            <!--$('.more_ten').show();-->
+            <!--$('.fixed').show();-->
+
+            alert('上传成功，js处理相关逻辑')
+        }else{
+            alert('上传成功，js处理相关逻辑')
+
+            <!--$('.page2').hide();-->
+            <!--$('.page3_form_remind').show();-->
+            <!--$('.page3').show();-->
+        }
+    });
+
+
+</script>
+
+</body>
+</html>
