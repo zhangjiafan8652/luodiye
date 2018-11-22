@@ -152,7 +152,7 @@ class Config extends BasicAdmin
 
         // 移动到框架应用根目录/public/uploads/ 目录下
         if($file){
-            $info = $file->move(ROOT_PATH . 'static' . DS . 'uploads');
+            $info = $file->move(ROOT_PATH . 'static' . DS . 'upload');
             if($info){
                 // 成功上传后 获取上传信息
                 // 输出 jpg
@@ -166,7 +166,7 @@ class Config extends BasicAdmin
                 echo $file->getError();
             }
         }
-        $file2 = request()->file('file2');
+      /*  $file2 = request()->file('file2');
 
         // 移动到框架应用根目录/public/uploads/ 目录下
         if($file2){
@@ -183,7 +183,7 @@ class Config extends BasicAdmin
                 // 上传失败获取错误信息
                 echo $file2->getError();
             }
-        }
+        }*/
     }
 
 
