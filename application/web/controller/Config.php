@@ -152,7 +152,7 @@ class Config extends BasicAdmin
 
         // 移动到框架应用根目录/public/uploads/ 目录下
         if($file){
-            $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
+            $info = $file->move(ROOT_PATH . 'static' . DS . 'uploads');
             if($info){
                 // 成功上传后 获取上传信息
                 // 输出 jpg
@@ -170,7 +170,7 @@ class Config extends BasicAdmin
 
         // 移动到框架应用根目录/public/uploads/ 目录下
         if($file2){
-            $info2 = $file2->move(ROOT_PATH . 'public' . DS . 'uploads');
+            $info2 = $file2->move(ROOT_PATH . 'static' . DS . 'uploads');
             if($info2){
                 // 成功上传后 获取上传信息
                 // 输出 jpg
