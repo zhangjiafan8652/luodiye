@@ -218,6 +218,7 @@
             var formData = new FormData();
             formData.append("ceshishuju", "上传图片测试数据");
             formData.append("file1", $('#file1')[0].files[0]);
+            console.log(formData);
           /*  formData.append("file2", $('#file2')[0].files[0]);*/
            // formData.append("file3", $('#file3')[0].files[0]);
             $.ajax({
@@ -229,6 +230,7 @@
                 contentType: false,
                 async: false
             }).done(function(res) {
+
 
             }).fail(function(res) {
 
