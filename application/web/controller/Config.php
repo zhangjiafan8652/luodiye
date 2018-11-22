@@ -152,7 +152,7 @@ class Config extends BasicAdmin
 
         // 移动到框架应用根目录/public/uploads/ 目录下
         if($file){
-            $info = $file->move('/static' . DS . 'upload');
+            $info = $file->move('/static/upload');
             if($info){
                 // 成功上传后 获取上传信息
                 // 输出 jpg
